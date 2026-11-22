@@ -1,0 +1,14 @@
+route:
+  receiver: default
+  group_by: [alertname, service]
+  group_wait: 5s
+  repeat_interval: 1h
+
+receivers:
+  - name: default
+    # Alerts show up in the Alertmanager UI (http://localhost:9093).
+    # For Slack notifications, uncomment and add your webhook URL:
+    # slack_configs:
+    #   - api_url: https://hooks.slack.com/services/XXX/YYY/ZZZ
+    #     channel: "#alerts"
+    #     send_resolved: true

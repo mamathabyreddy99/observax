@@ -1,0 +1,20 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: Lint services
+        run: |
+          pip install ruff
+          ruff check services loadgen
+      - name: Validate configs
+        run: |
+          docker compose config -q
+          docker run --rm --entrypoint promtool -v "$PWD/prometheus:/p" prom/prometheus:v2.53.0 check rules /p/alerts.yml
+          python -m json.tool grafana/dashboards/observax-overview.json > /dev/null
+      - name: Build images
+        run: docker compose build

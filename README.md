@@ -46,7 +46,11 @@ docs/          architecture notes
 - [ ] Slack notifications enabled by env var
 
 ## What I learned
-_Fill this in: e.g. why histograms beat averages for latency, how a slow dependency shows up in upstream services, how `for:` durations reduce alert noise._
+- Histograms are better than averages for latency, because they show the slow tail (p95) that real users feel.
+- When payments slowed down, orders and gateway looked slow too. The symptom shows up at the edge, but the cause is deeper in the chain.
+- Slow and broken are different problems: the latency fault raised p95 but not the error rate, so the dashboard tracks both.
+- Alert rules use a `for:` delay so one-off blips don't trigger a notification.
+- Injecting faults on purpose is a good way to prove that dashboards and alerts work.
 ## Screenshots
 
 **Latency fault injected into payments: p95 and p50 spike on all three services**
